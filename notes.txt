@@ -68,3 +68,10 @@ didn't die, it was missing some of them.
 Starts the week of Jun 3. Ends after the week of Aug 5, back to 2 the week of Aug 12. So about 10 weeks. 
 The week of July 29 is the worst, 77. Check_ins stay normal the whole time (160-190 a week) so people kept coming, 
 only the check_outs went missing.
+
+7. check_outs at a different branch
+58 of the 60 are a check_out at another branch just 2 seconds to 2 minutes after the check_in.
+Not physically possible, and way too short for a real visit.
+Always nearby braches in the same or next timezone (1-2, 3-4, 7-8), never coast to coast.
+Not sure why yet. Could be card sharing, wrong member_id, or wrong device/branch on the event.
+The other 2 took 1-2 days and both endede at D07-OUT. Probably just the missing check_out problem showing up.
