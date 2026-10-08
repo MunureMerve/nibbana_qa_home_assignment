@@ -84,3 +84,35 @@ About 54 visits per branch, so once a week. Pearl District has 35 because it ope
 Always right when the branch opens, and each visit is about a minute.
 These look like test cards for checking the turnstiles. They should not count as visits.
 Other checks were clean: no missing member_id, no unknown devices, no device at the wrong branch.
+
+9. Late night check_ins at Mission Bay
+172 check_ins at branch 7 after closing, all between 11pm and 1am, all in June to August.
+Same branch and same months as the missing check_outs. Probably the same problem. 81 different members, 
+so it's not one or two staff people.
+131 of them do have a check_out next, but it comes 6 hours to 14 days later. Median is about 2 days.
+So those aren't real visits. My pairing rule was matching them with a check_out from a later visit.
+I can't tell the exact cause from the data. Something was wrong with the turnstiles at Mission Bay that summer.
+Need to ask the access-control team.
+Fix for the report: a check_out has to be on the same local day as the check_in.
+
+10. Friend visits without the member
+58 of 6,875 friend_visits have no check_in by the member at the same branch on the same local day.
+The README says a friend can only come in with the member, so these break the rule. 
+Small number. Probably the member's check_in just didn't get recorded.
+
+11. Friend visit limits
+71 member_months went over the friend limit. basic 41, standard 20, premium 10.
+Worst cases: 5 in a month on basic (limit 2), 11 on premium (limit 8).
+The data is probably fine here. Looks like the front desk isn't enforcing the limit, 18 member-months have
+friend visits but no tier yet, like the member brought friends before their membership started.
+For tier I used the latest tier event up to the end of that month. If the tier changes mid-month the README
+doesn't say which one counts.
+
+12. members.status vs membership events
+The README says membership state comes from events, so I compared the two. Most match.
+But:
+34 are "active" in members, but their last event is a cancellation.
+15 are "cancelled" in members, but they started or reactivated after that.
+2 are "active" but have no membership events at all.
+5 have status "Active" with a capital A. Same kind of problem as CHECK_IN.
+So the members table if out of date. Anything that uses members.staus for active counts will be off by about 49.
