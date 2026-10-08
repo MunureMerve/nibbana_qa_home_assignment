@@ -33,3 +33,33 @@ That's the middle of the night at every branch, all of them closed. Probably a s
 D08 is only in the October batch. That makes sense, since Pearl District opened in May.
 The check_in and check_out numbers are almost the same for each device, so whole visits got copied.
 That's about 584 duplicate visits on Mar 20 and 874 on Oct 20 if we don't remove duplicates.
+
+4c. Each resend copied the few days right before it.
+Mar 20 batch ---> originals from Mar 17 morning to Mar 20 early morning, about 3 days.
+Oct 20 batch ---> originals from Oct 16 morning to Oct 20 early morning, about 4 days.
+So it's not a monthly job. Looks more like the systems had a problem, then resent its recent backlog
+and put the resend time on everything.
+The counts are close to a normal 3 or 4 days of events, so it's probably almost all of them.
+
+5.check_in vs check_out after dedupe
+After removing duplicates and counting CHECK_IN as check_in:
+72,305 unique check_ins vs 71,413 unique don't explain it. These look like real missing check_outs.
+Sanity check ---> Rows removed by dedupe add up to 3,756 same as before.
+
+5b. Pairing check_ins with check_outs
+Rule I'm using: Line up each member's check_ins and check_outs by time. After a check_in, the next event
+should be a check_out at the same branch.
+72,305 check_ins (matches the dedupe count).
+1,255 have no check_out right after them.
+60 have a check_out next, but at a different branch. Not a valid visit per the README.
+The 892 gap was hiding things. If 1,255 check_ins have no check_out, then roughly 363 check_outs must have
+no check_in before them. So we have two problems at this point.
+
+6. Missing check_outs at Mission Bay (branch 7)
+Most branches have about 1-2% of check_ins with no check_out. Probably normal stuff, people tailgating or 
+the reader missing a card.
+Mission Bay is at 4.3% about 300 more than the others would suggest.
+By month, most of the year is fine, about 10 a month. Summer is where it goes wrong: 
+103 in June, 146 in July, 84 in Aug.
+So it's a summer problem. But even in July most check_ins still have a check_out, so the exit turnstile 
+didn't die, it was missing some of them. 
