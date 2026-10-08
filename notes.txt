@@ -25,3 +25,11 @@ At first I thought fractional seconds might mark the re-sent rows, but they show
 so that doesn't work. Only the two spike days stand out.
 For the report: dedupe on source_ref alone, keep the first copy.
 Some refs have 3+ copies, should check how many.
+
+4b. Where the resends came from
+It's every device at every branch, in both batches. So, it's not one broken device, something central sent everything again.
+Mar 20 07:11 to 07:18 UTC. Oct 20 07:21 to 07:32 UTC. Only a few minutes each time.
+That's the middle of the night at every branch, all of them closed. Probably a scheduled job. 
+D08 is only in the October batch. That makes sense, since Pearl District opened in May.
+The check_in and check_out numbers are almost the same for each device, so whole visits got copied.
+That's about 584 duplicate visits on Mar 20 and 874 on Oct 20 if we don't remove duplicates.
