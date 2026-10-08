@@ -75,3 +75,12 @@ Not physically possible, and way too short for a real visit.
 Always nearby braches in the same or next timezone (1-2, 3-4, 7-8), never coast to coast.
 Not sure why yet. Could be card sharing, wrong member_id, or wrong device/branch on the event.
 The other 2 took 1-2 days and both endede at D07-OUT. Probably just the missing check_out problem showing up.
+
+8. Two numbers that don't exits
+828 events belong to member_ids that aren't in the members table. Only two ids: 990001 and 990002.
+They only have check_ins and check_outs, 414 of each. No membership events.
+9900001 goes to branches 1-4, 990002 goes to branches 5-8.
+About 54 visits per branch, so once a week. Pearl District has 35 because it opened in May.
+Always right when the branch opens, and each visit is about a minute.
+These look like test cards for checking the turnstiles. They should not count as visits.
+Other checks were clean: no missing member_id, no unknown devices, no device at the wrong branch.
