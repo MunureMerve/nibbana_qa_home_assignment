@@ -75,6 +75,8 @@ Not physically possible, and way too short for a real visit.
 Always nearby braches in the same or next timezone (1-2, 3-4, 7-8), never coast to coast.
 Not sure why yet. Could be card sharing, wrong member_id, or wrong device/branch on the event.
 The other 2 took 1-2 days and both endede at D07-OUT. Probably just the missing check_out problem showing up.
+Update: after leaving out the test cards (see 8), only 2 of these are left. The other 58 were the test cards
+moving between branches a few minutes apart. So this is really part of problem 8.
 
 8. Two numbers that don't exits
 828 events belong to member_ids that aren't in the members table. Only two ids: 990001 and 990002.
@@ -117,3 +119,13 @@ But:
 2 are "active" but have no membership events at all.
 5 have status "Active" with a capital A. Same kind of problem as CHECK_IN.
 So the members table is out of date. Anything that uses members.status for active counts will be off by about 49.
+
+13. Mission Bay check_outs on a different day
+When I ran the report logic, Mission Bay lost 1,654 check_ins. Other branches lose about 2%.
+1,195 of those have a check_out next, but on a different day. Only at Mission Bay, only June to August.
+Gap is 6 hours to 42 days, median about 2 days. Not a clean 24h shift, so it's not just a wrong date.
+Looks like both the member's check_out and their next check_in went missing, so my rule paired the 
+first check_in with the second visit's check_out.
+So it's not only the exit turnstile. Both turnstiles at Mission Bay were losing events that summer. 
+6, 9 and this are the same problem. The same-day rule is right to drop these, but Mission Bay's summer
+visits will be undercounted and there's no honest way to fill them back in.
