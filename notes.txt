@@ -103,8 +103,9 @@ Small number. Probably the member's check_in just didn't get recorded.
 11. Friend visit limits
 71 member_months went over the friend limit. basic 41, standard 20, premium 10.
 Worst cases: 5 in a month on basic (limit 2), 11 on premium (limit 8).
-The data is probably fine here. Looks like the front desk isn't enforcing the limit, 18 member-months have
-friend visits but no tier yet, like the member brought friends before their membership started.
+The data is probably fine here. Looks like the front desk isn't enforcing the limit. 
+18 member-months have friend visits but no tier yet, like the member brought friends before 
+their membership started.
 For tier I used the latest tier event up to the end of that month. If the tier changes mid-month the README
 doesn't say which one counts.
 
@@ -115,4 +116,4 @@ But:
 15 are "cancelled" in members, but they started or reactivated after that.
 2 are "active" but have no membership events at all.
 5 have status "Active" with a capital A. Same kind of problem as CHECK_IN.
-So the members table if out of date. Anything that uses members.staus for active counts will be off by about 49.
+So the members table is out of date. Anything that uses members.status for active counts will be off by about 49.
