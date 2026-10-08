@@ -1,0 +1,27 @@
+1. CHECK_IN in capitals
+Found 181 rows with event_type = 'CHECK_IN' instead of 'check_in'.
+All from one device ---> D04-IN (Riverwalk, Austin).
+Broke it down by local day ---> Mon Apr 8 to Sun Apr 14 it's only caps before and after only lowercase. 
+So the device switched for exactly one week and then went back.
+Daily numbers that week look normal (18-35), so nothing's missing. It's just labeled wrong.
+My guess is a firmware or config change that got rolled back.
+Anything that matches 'check_in' exactly will lose that whole week for Austin.
+
+2. UTC vs local
+Some 2024 check_ins show up as 2025-01-01 in UTC. Converted to local they're Dec 31 evening.
+Also saw it when I filtered from Apr 5 UTC and got Apr 4 rows back for Austin.
+Need to do all date logic in the branch's timezone.
+
+3. check_in vs check_out gap
+74,094 check_ins (incl. the 181 caps ones) vs 73,205 check_outs, so 889 more check_ins.
+
+4. Duplicates
+3,736 source_refs show up more than once. 3,756 extra rows in total.
+Looked at a few by hand and they're not all the same kind of problem:
+- 700 have the same event_ts and were ingested a few seconds apart. Probably a retry.
+- 3036 have a different event_ts on the second copy. Every one of those later copies is on either 
+Mar 20 (1,224) or Oct 20 (1,812). Looks like two bulk re-sends that stamped the re-send time instead of the real time.
+At first I thought fractional seconds might mark the re-sent rows, but they show up every day (150-250/day), 
+so that doesn't work. Only the two spike days stand out.
+For the report: dedupe on source_ref alone, keep the first copy.
+Some refs have 3+ copies, should check how many.
