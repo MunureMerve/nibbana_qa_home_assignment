@@ -1,0 +1,46 @@
+AI log
+Tools: Claude Code in VS Code, Claude chat.
+
+Setup
+- Claude Code wrote AI_PROMPTS.txt (a prompt plan for each step) and the rules in CLAUDE.md. I kept AI_PROMPTS.txt
+out of the repo.
+
+Exploring the data
+- Claude chat drafted most of the exploration queries. I ran them myself and read the results.
+- CHECK_IN: AI suggested splitting by device, then by day. That showed one device, one week.
+- 889 gap: I asked if the 181 CHECK_IN rows were included. They were. After dedupe the gap was still 892, so it's
+a separate problem.
+- AI's first duplicate query called a column "extra_rows" but it was counting source_refs, not rows. Caught it
+and fixed the query.
+- AI first guessed a clock problem for the Mission Bay late check_ins, then dropped it with bad reasoning (it only
+thought about the clock being behind, not ahead). When I ran the test suite, the ingested_at < event_ts check
+failed and showed D07-IN was 3 hours ahead all summer. So the clock idea was right.
+- I caught number and ID mistakes in my notes (DO4 vs D04, 74,904 vs 74,094).
+- I wrote the notes in my own words. Where AI drafted a note, I rewrote it.
+
+Report decisions
+- Pairing: I wanted to check each check_in for its own check_out. AI turned that into "the next event must be 
+a check_out at the same branch".
+- Check_ins with no check_out: my call, not counted, because the README says a visit ends with a check_out.
+- AI suggested leaving out members not in the members table instead of hardcoding 990001 and 990002. I agreed
+because the query has to run on a different database.
+- AI suggested the same-day rule. I checked what each rule removes per branch. That showed the 58 cross-branch
+check_outs were the test cards, and that the same-day rule only affects Mission Bay in summer.
+- After the clock problem showed up, AI suggested using instead_at when event_ts is later than it. I agreed
+because it fixes Mission Bay without naming a device or a 3 hour offset.
+- I typed the report query myself from the AI draft to make sure I understood it.
+
+Test suite
+- I chose TypeScript because it's what I use most.
+- AI suggested a small runner instead of Jest so there can be PASS, WARN and FAIL. I agreed.
+- AI proposed the severities and the 5% threshold. I kept them.
+- Checking events before joined_on was my idea. I wrote it as a Jest test first, then moved it 
+into the checks/ format.
+
+How I checked the AI's SQL
+- Counted the same thing two different ways and compared. Rows removed by dedupe added up to 3,756 both ways.
+The pairing query gave 72,305 check_ins, same as the dedupe count.
+- Before running the report, wrote down what I expected (Pearl District lowest, total around 70,000).
+- Broke the report down by which rule removed each check_in, per branch. That's how the Mission Bay problem
+showed up.
+- Ran the test suite and compared every result with my earlier findings before trusting it.
