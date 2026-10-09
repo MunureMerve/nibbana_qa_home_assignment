@@ -13,6 +13,9 @@
 -- 6. Days and years use the branch's local time zone. A visit counts for 2024 when its check is in 2024
 --    local time.
 -- 7. Every branch is listed, with 0 if it had no visits.
+-- 8. If event_ts is later than ingested_at, ingested_at is used instead. An event can't reach the database
+-- before it happens. Mission Bay's entrance clock was 3 hours ahead from June 6 to August 5, 2024, and
+-- ingested_at is only a few minutes after the real time.
 
 WITH access_events AS (
     -- decisions 1, 2, and 3
@@ -20,7 +23,7 @@ WITH access_events AS (
            e.event_id,
            e.member_id,
            lower(e.event_type) AS event_type,
-           e.event_ts,
+           least(e.event_ts, e.ingested_at) AS event_ts,
            e.branch_id
     FROM events e
     JOIN members m ON m.member_id = e.member_id

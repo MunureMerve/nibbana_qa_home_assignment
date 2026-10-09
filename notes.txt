@@ -129,3 +129,12 @@ first check_in with the second visit's check_out.
 So it's not only the exit turnstile. Both turnstiles at Mission Bay were losing events that summer. 
 6, 9 and this are the same problem. The same-day rule is right to drop these, but Mission Bay's summer
 visits will be undercounted and there's no honest way to fill them back in.
+
+14. The real cause at Mission Bay: entrance clock 3 hours ahead
+The test for ingested_at < event_ts failed with 1,542 rows. All from D07-IN.
+event_ts is always 2h66m to 3h ahead of ingested_at. That's the gap between Eastern and Pacific time.
+Starts June at 6 opening, ends Aug 5 in the evening. This explains 6, 9 and 13. check_ins were stamped 3 hours
+late, so evening check_ins looked like they were after closing, and check_ins landed after their own check_out,
+which broke the pairing. 
+I was wrong earlier when I said both turnstiles were closing events, and that the visits couldn't be recovered.
+Fix in the report: use ingested_at when event_ts is later than it.
