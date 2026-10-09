@@ -3,7 +3,7 @@
 -- description: branch-months where more than 5% of check_ins have no check_out at the same branch on the same local day. Normal is 1-2%.
 WITH access_events AS (
     SELECT DISTINCT ON (e.source_ref)
-           e.event_id, e.member_id, lower(e.event_type) AS event_type, e.event_ts, e.branch_id
+           e.event_id, e.member_id, lower(e.event_type) AS event_type, least(e.event_ts, e.ingested_at) AS event_ts, e.branch_id
     FROM events e
     JOIN members m ON m.member_id = e.member_id
     WHERE lower(e.event_type) IN ('check_in', 'check_out')

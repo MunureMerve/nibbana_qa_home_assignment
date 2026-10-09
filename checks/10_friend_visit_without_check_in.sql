@@ -4,7 +4,7 @@
 WITH ev AS (
     SELECT DISTINCT ON (e.source_ref)
            e.event_id, e.member_id, lower(e.event_type) AS event_type, e.branch_id,
-           (e.event_ts AT TIME ZONE b.timezone)::date AS local_day
+           (least(e.event_ts, e.ingested_at) AT TIME ZONE b.timezone)::date AS local_day
     FROM events e
     JOIN branches b ON b.branch_id = e.branch_id
     WHERE lower(e.event_type) IN ('check_in', 'friend_visit')

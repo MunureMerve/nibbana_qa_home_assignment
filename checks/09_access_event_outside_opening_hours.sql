@@ -9,10 +9,10 @@ WITH access_events AS (
     ORDER BY e.source_ref, e.ingested_at, e.event_id
 )
 SELECT a.branch_id, lower(a.event_type) AS event_type,
-       to_char(a.event_ts AT TIME ZONE b.timezone, 'YYYY-MM') AS month, count(*) AS events
+       to_char(least(a.event_ts, a.ingested_at) AT TIME ZONE b.timezone, 'YYYY-MM') AS month, count(*) AS events
 FROM access_events a
 JOIN branches b ON b.branch_id = a.branch_id
-WHERE (a.event_ts AT TIME ZONE b.timezone)::time < b.opens_at
-   OR (a.event_ts AT TIME ZONE b.timezone)::time > b.closes_at
+WHERE (least(a.event_ts, a.ingested_at) AT TIME ZONE b.timezone)::time < b.opens_at
+   OR (least(a.event_ts, a.ingested_at) AT TIME ZONE b.timezone)::time > b.closes_at
 GROUP BY 1, 2, 3
 ORDER BY 1, 2, 3;
