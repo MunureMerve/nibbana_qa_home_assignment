@@ -44,3 +44,8 @@ The pairing query gave 72,305 check_ins, same as the dedupe count.
 - Broke the report down by which rule removed each check_in, per branch. That's how the Mission Bay problem
 showed up.
 - Ran the test suite and compared every result with my earlier findings before trusting it.
+
+- AI changed my events-before-join check to use the branch's local date. That flagged 241 members, but comparing
+UTC gave 0. joined_on is stored as a UTC date, so I switched the check back to UTC, which is wht my first version did.
+- I updated checks 08, 09 and 10 myself to use the same ingested_at fix as the report. After that, 08 and 09
+passed and 10 went from 58 to 55.
